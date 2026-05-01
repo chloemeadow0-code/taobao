@@ -212,12 +212,16 @@ async def get_server_info() -> str:
 
 if __name__ == "__main__":
     print(
-        f"Starting taobao MCP server on 0.0.0.0:{port} "
-        f"(sinataoke={SINATAOKE_VERSION}, timeout={CALL_TIMEOUT}s)",
+        f"✅ Starting taobao MCP server on 0.0.0.0:{port}\n"
+        f"   Transport: SSE (Server-Sent Events) - 已适配 Web 客户端\n"
+        f"   sinataoke={SINATAOKE_VERSION}, timeout={CALL_TIMEOUT}s",
         flush=True,
     )
+    
+    # Rikkahub 等 Web 客户端不支持 streamable-http，必须使用 sse 协议。
+    # 改为 sse 后，FastMCP 内部会自动挂载客户端需要的 /sse 和 /messages 路由。
     mcp.run(
-        transport="streamable-http",
+        transport="sse",
         host="0.0.0.0",
         port=port,
     )
